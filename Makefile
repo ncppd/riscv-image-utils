@@ -31,9 +31,6 @@ $(BUILDROOT_DIR):
 $(LINUX_DIR):
 	git clone --branch v$(LINUX_VERSION) $(LINUX_REPO) $(LINUX_DIR)
 
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 opensbi: $(OPENSBI_DIR)
 	$(MAKE) -C $(OPENSBI_DIR) PLATFORM=generic CROSS_COMPILE=$(CROSS_COMPILE)
 	cp $(OPENSBI_DIR)/build/platform/generic/firmware/fw_jump.elf $(OUTPUT_DIR)
@@ -50,11 +47,8 @@ linux-menuconfig: $(LINUX_DIR)
 linux: $(LINUX_DIR)
 	if [ ! -f $(LINUX_DIR)/.config ]; then $(MAKE) -C $(LINUX_DIR) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) defconfig; fi
 	$(MAKE) -C $(LINUX_DIR) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE)
-	cp $(LINUX_DIR)/vmlinux $(OUTPUT_DIR)/vmlinux
+	cp $(LINUX_DIR)/vmlinux $(OUTPUT_DIR)
 	cp $(LINUX_DIR)/arch/riscv/boot/Image $(OUTPUT_DIR)
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean-opensbi:
 	if [ -d $(OPENSBI_DIR) ]; then $(MAKE) -C $(OPENSBI_DIR) clean; fi
@@ -73,7 +67,6 @@ clean:
 
 veryclean:
 	rm -rf $(WORKING_DIR) vars .setup-complete
-
 
 deps: $(SETUP_DONE)
 
